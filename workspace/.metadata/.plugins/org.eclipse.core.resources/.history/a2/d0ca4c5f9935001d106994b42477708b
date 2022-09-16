@@ -1,0 +1,7 @@
+package tw.tylu.model;
+
+public class Person {
+
+	public Person() {}
+
+}

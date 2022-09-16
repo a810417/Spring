@@ -1,0 +1,24 @@
+package tw.tylu.action;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import tw.tylu.util.LogProvider;
+
+public class DemoLogProviderAction {
+
+	public static void main(String[] args) {
+		// 讀取組態檔
+		ApplicationContext context = new ClassPathXmlApplicationContext("beans.config.xml");
+		
+		// 透過 id 向 Spring 要求一個 bean
+		LogProvider logger = (LogProvider)context.getBean("logProvider");
+		logger.log("Have a nice day!");
+		
+		// 用完關閉
+		((ConfigurableApplicationContext)context).close();
+
+	}
+
+}

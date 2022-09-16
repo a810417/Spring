@@ -1,0 +1,18 @@
+package tw.tylu.action;
+
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import tw.tylu.model.LoginService;
+
+public class DemoLoginService {
+
+	public static void main(String[] args) {
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("beans.config.xml");
+		
+		LoginService loginService1 = context.getBean("loginService1", LoginService.class);
+		loginService1.checkLogin("john", "test123");
+
+		context.close();
+	}
+
+}

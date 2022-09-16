@@ -1,0 +1,5 @@
+package tw.tylu.util;
+
+public class LogProvider {
+
+}

@@ -1,7 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- 說明應用程式會用到 annotation 組態 -->
+	<context:annotation-config />
+	<!-- 使用 annotation 組態的類別放在 model 套件內 -->
+	<!-- 寫到上層會向下掃描 -->
+	<context:component-scan base-package="tw.tylu" />
+
+	<bean id="datasource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName"
+			value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+		<property name="url"
+			value="jdbc:sqlserver://localhost:1433;databaseName=Spring" />
+		<property name="username" value="sa" />
+		<property name="password" value="P@ssw0rd" />
+	</bean>
+
+	<!-- 利用 properties 檔來儲存系統常數 -->
+	<!-- 見 spring.io 的 API DOC 檔裡面的 PropertiesFactoryBean(下方的路徑)，使用 Location 
+		屬性的 setLocation -->
+	<!-- classpath 就是自設的檔案 tree.properties -->
+	<bean id="props"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="location">
+			<value>classpath:tree.properties</value>
+		</property>
+	</bean>
+
 
 	<!-- LogProvider logProvider = new LogProvider(); -->
 	<bean id="logProvider" class="tw.tylu.util.LogProvider" />
@@ -31,9 +62,79 @@
 	</bean>
 
 	<!-- Person person1 = new Person("julia", 25) -->
-	<bean id="person1" class="tw.tylu.model.Person">
+	<bean id="person1" class="tw.tylu.model.Person" scope="prototype">
 		<constructor-arg index="0" value="julia" />
 		<constructor-arg index="1" value="25" />
 	</bean>
 
+	<!-- Person person2 = new Person(); -->
+	<!-- person2.setMydate("date1"); -->
+	<bean id="date1" class="java.util.Date"></bean>
+	<bean id="person2" class="tw.tylu.model.Person">
+		<property name="mydate" ref="date1" />
+	</bean>
+
+	<!-- Person person3 = new Person(); -->
+	<!-- person3.setMydate("date1"); -->
+	<bean id="person3" class="tw.tylu.model.Person" p:name="henry"
+		p:age="20" p:mydate-ref="date1" />
+
+
+
+	<bean id="hondaTruck" class="tw.tylu.model.TruckBean">
+		<property name="id" value="1" />
+		<property name="brand" value="Honda" />
+	</bean>
+
+	<bean id="toyotaTruck"
+		class="tw.tylu.model.TruckBeanStaticFactory"
+		factory-method="getTruckBean">
+		<constructor-arg value="1" />
+	</bean>
+
+	<bean id="nissanTruck"
+		class="tw.tylu.model.TruckBeanStaticFactory"
+		factory-method="getTruckBean">
+		<constructor-arg value="2" />
+	</bean>
+
+	<bean id="truckBeanFactory" class="tw.tylu.model.TruckBeanFactory">
+		<property name="map">
+			<map>
+				<entry key="5">
+					<bean class="tw.tylu.model.TruckBean">
+						<property name="id" value="7" />
+						<property name="brand" value="ferrari" />
+					</bean>
+				</entry>
+				<entry key="6">
+					<bean class="tw.tylu.model.TruckBean">
+						<property name="id" value="8" />
+						<property name="brand" value="subaru" />
+					</bean>
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<bean id="ferrariTruck" factory-bean="truckBeanFactory"
+		factory-method="getTruckBean">
+		<constructor-arg value="5" />
+	</bean>
+
+	<bean id="subaruTruck" factory-bean="truckBeanFactory"
+		factory-method="getTruckBean">
+		<constructor-arg value="6" />
+	</bean>
+
+	<bean id="worker1" class="tw.tylu.model.Worker">
+		<property name="id" value="1001" />
+		<property name="name" value="mary" />
+		<property name="title" value="engineer" />
+	</bean>
+	<bean id="worker2" class="tw.tylu.model.Worker">
+		<property name="id" value="1002" />
+		<property name="name" value="jack" />
+		<property name="title" value="sales" />
+	</bean>
 </beans>

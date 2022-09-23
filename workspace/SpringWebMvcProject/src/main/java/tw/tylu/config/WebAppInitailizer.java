@@ -16,15 +16,15 @@ public class WebAppInitailizer extends AbstractAnnotationConfigDispatcherServlet
 	// 設定相當於mvc-servlet.xml的Java程式組態
 	@Override
 	protected Class<?>[] getServletConfigClasses() {
-//		return new Class[] { WebAppConfig.class };
-		return null;
+		return new Class[] { WebAppConfig.class };
+//		return null;
 	}
 
 	// 設定url-pattern
 	@Override
 	protected String[] getServletMappings() {
-//		return new String[] { "/" };
-		return null;
+		return new String[] { "/" };
+//		return null;
 	}
 
 	@Override

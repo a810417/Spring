@@ -10,9 +10,43 @@
 	<context:annotation-config />
 	<context:component-scan base-package="tw.tylu" />
 	<mvc:annotation-driven />
-
 	<!-- 預設不能直接讀取 HTML 檔案，要加上下面這行才能讀取 -->
 	<mvc:default-servlet-handler />
+	
+	<!-- 網址輸入 http://localhost:8080/SpringWebMvcProject/ 就可以跳轉到 MembersController 中 GetMapping 設置 membersmain.controller 的頁面(也就是 members.jsp) -->
+	<mvc:view-controller path="/" view-name="redirect:membersmain.controller"/>
+	<!-- 網址輸入 http://localhost:8080/SpringWebMvcProject/funny.day 就可以跳轉到 loginSystem.jsp 頁面 -->
+	<mvc:view-controller path="/funny.day" view-name="loginSystem"/>
+	<!-- 透過 mvc:view-controller 可以達到之前在 @Controller 跳轉頁面的效果 -->
+
+	<!-- 支援靜態資源的路徑 -->
+	<!-- location:原始資源位置 / mapping:網址連結的虛擬位置(映射資源位置) -->
+	<mvc:resources location="/WEB-INF/resources/images/"
+		mapping="/images/**" />
+	<mvc:resources location="/WEB-INF/resources/css/"
+		mapping="/css/**" />
+
+	<!-- 設定多語系 -->
+	<!-- 註冊 bean 去找 i18n 資料夾中 message 開頭的檔案(自設的.properties 檔)，內容包含自設的語系設定 -->
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename" value="i18n.message" />
+		<property name="defaultEncoding" value="UTF-8" />
+	</bean>
+	<!-- 用 LocaleChangeInterceptor 攔截器解析區域參數，可以設定哪些要解析的參數名稱(mapping path) -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean id="localeChange"
+				class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+				<property name="paramName" value="locale" />
+			</bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+	<!-- 解析區域，將解析的區域訊息存到 session 中來使用 -->
+	<bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.SessionLocaleResolver" />
 
 	<!-- JSP 版本 -->
 	<bean id="viewResolver1"
@@ -31,6 +65,9 @@
 
 	<!-- 用 name 來做對應，在 JSP 輸入 name；class 為指定的 Controller(Servlet) -->
 	<bean id="helloController" name="/hello.controller"
-		class="tw.tylu.controller.HelloController"></bean>
+		class="tw.tylu.controller.HelloController">
+	</bean>
+
+
 
 </beans>

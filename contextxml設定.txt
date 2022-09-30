@@ -1,0 +1,8 @@
+<Resource 
+	    name="connectSqlServerJdbc/SystemService"
+		type="javax.sql.DataSource" 
+		auth="Container" 
+		username="sa"
+		password="P@ssw0rd"
+		driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+		url="jdbc:sqlserver://localhost:1433;databaseName=SpringMVCHW"/>

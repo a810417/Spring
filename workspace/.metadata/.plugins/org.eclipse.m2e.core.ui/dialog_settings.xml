@@ -2,6 +2,7 @@
 <section name="Workbench">
 	<section name="wizardPage">
 		<list key="groupId">
+			<item value="SpringMvcHW"/>
 			<item value="SpringWebMvcProject"/>
 			<item value="SpringWebProject"/>
 			<item value="SpringProject"/>
@@ -9,6 +10,7 @@
 		<list key="name">
 		</list>
 		<list key="artifactId">
+			<item value="SpringMvcHW"/>
 			<item value="SpringWebMvcProject"/>
 			<item value="SpringWebProject"/>
 			<item value="SpringProject"/>

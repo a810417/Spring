@@ -1,8 +1,13 @@
 package fifth.project.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,14 +42,14 @@ public class MemberController {
 		return "deleteDone";
 	}
 
-	@PostMapping(path="/insertMem.controller")
+	@PostMapping(path = "/insertMem.controller")
 	public String processInsertAction(@RequestParam("account") String account,
 			@RequestParam("password") String password, @RequestParam("nickname") String nickname,
 			@RequestParam("email") String email, @RequestParam("photo") MultipartFile photo) throws IOException {
-		
-		byte[] pByte = photo.getBytes();		
+
+		byte[] pByte = photo.getBytes();
 		Member m = new Member();
-		m.setAccount( account);
+		m.setAccount(account);
 		m.setPassword(password);
 		m.setNickname(nickname);
 		m.setEmail(email);
@@ -52,6 +57,25 @@ public class MemberController {
 		mService.insertMem(m);
 
 		return "insertDone";
+	}
+	
+	@GetMapping(path = "/show.controller")
+	public String processSelectAction(Model m) {
+		List<Member> list = mService.selectAll();
+		m.addAttribute("list", list);
+		
+		return "showPage";
+	}
 
+	
+	@GetMapping("/downloadImage/{id}")
+	public ResponseEntity<byte[]> downloadImage(@PathVariable Integer id){
+		byte[] pByte = mService.getPhotoById(id);
+
+		System.out.println(pByte);
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.IMAGE_JPEG);
+		return new ResponseEntity<byte[]>(pByte, headers, HttpStatus.OK);
 	}
 }

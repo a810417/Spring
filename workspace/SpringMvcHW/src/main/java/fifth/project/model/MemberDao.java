@@ -1,6 +1,7 @@
 package fifth.project.model;
 
 import java.util.Date;
+import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -63,6 +64,34 @@ public class MemberDao {
 //		}
 		session.close();
 		return m;
+	}
+	
+	public List<Member> selectAll(){
+		
+		String str="from Member";
+		
+		Session session = sessionFactory.openSession();
+		Query<Member> createQuery = session.createQuery(str, Member.class);
+		List<Member> list = createQuery.getResultList();
+		return list;
+	}
+	
+	public byte[] getPhotoById(Integer id) {
+
+		String str="from Member where id=:id";
+		Session session = sessionFactory.openSession();		
+		
+		Query<Member> createQuery = session.createQuery(str, Member.class);
+		createQuery.setParameter("id", id);
+		Member rs = createQuery.uniqueResult();
+		if(rs==null) {
+			System.out.println("沒有東西");
+			return null;
+			
+		}else {
+			
+		byte[] rsByte = rs.getPhoto();
+		return rsByte;}
 	}
 
 }
